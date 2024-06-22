@@ -1,0 +1,9 @@
+App\Model\Base\ModelStandardBaseMaster:
+    exclusion_policy: ALL
+    properties:
+        name:
+            expose: true
+            groups: [mm.name]
+        description:
+            expose: true
+            groups: [mm.description]

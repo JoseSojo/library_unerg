@@ -1,0 +1,33 @@
+App\Entity\M\User\Notification:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [notification.id]
+        type:
+            expose: true
+            groups: [notification.type]
+        priority:
+            expose: true
+            groups: [notification.priority]
+        title:
+            expose: true
+            groups: [notification.title]
+        content:
+            expose: true
+            groups: [notification.content]
+        status:
+            expose: true
+            groups: [notification.status]
+        link:
+            expose: true
+            groups: [notification.link]
+        sourceTypeObjectId:
+            expose: true
+            groups: [notification.source_type_object_id]
+        sourceTypeObject:
+            expose: true
+            groups: [notification.source_type_object]
+        icon:
+            expose: true
+            groups: [notification.icon]

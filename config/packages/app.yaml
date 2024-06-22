@@ -1,0 +1,6 @@
+parameters:
+    from_name: Company Name
+    mailer_user: "no-reply@companyname.com"
+    app_name: CompanyName
+    disable_delivery:
+        sms: false

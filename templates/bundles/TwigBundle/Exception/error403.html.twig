@@ -1,0 +1,28 @@
+{% extends "bundles/TwigBundle/Exception/_base.html.twig" %}
+
+{% block title %}{{ "flash.error.403.message_top"|trans({},"flashes") }}{% endblock %}
+
+{% block content %}
+	<div class="content-center cl-white">
+		<div class="row justify-content-center">
+			<div class="col-12">
+				<div class="section-title centered">
+					<div>
+						<h1>403</h1>
+					</div>
+					<h2>¡UPS! Lo sentimos</h2>
+					<p>{{ "flash.error.403.message"|trans({},"flashes") }} <a href="{{ path('app_route_home_p') }}" class="link">Ir a inicio</a></p>
+				</div>
+				<div class="section-title">
+					<p>
+						{{ "flash.error.403.message.solution"|trans({},"flashes") }}<br>
+						<b>1.</b> {{ "flash.error.403.message.1"|trans({},"flashes") }}<br>
+						<b>2.</b> {{ "flash.error.403.message.2"|trans({},"flashes") }}<br>
+						<b>3.</b> {{ "flash.error.403.message.3"|trans({},"flashes") }}<br>
+						<b>4.</b> {{ "flash.error.403.message.4"|trans({},"flashes") }}<br>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

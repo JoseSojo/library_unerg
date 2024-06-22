@@ -1,0 +1,100 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: 'en'
+    jms_serializer.metadata.yaml_driver.class: 'Maximosojo\ToolsBundle\Component\JMS\Serializer\Metadata\Driver\YamlDriver'
+    jms_serializer.datetime_handler.class: 'Maximosojo\ToolsBundle\Component\JMS\Serializer\Handler\DateHandler'
+    project_dir: '%kernel.project_dir%'
+    debug_mail: "%env(resolve:MAILER_DEBUG)%"
+    app.disable_delivery.sms: true
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        # public: false
+        
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    # App\Controller\:
+    #     resource: '../src/Controller'
+    #     tags: ['controller.service_arguments']
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    
+    #Menu Builder
+    app.easyadmin_builder:
+        class: App\Model\EasyAdminBuilder
+        public: true
+        tags:
+            - { name: easyadmin_builder.builder, alias: main }
+
+    # DoctrineSubscriber
+    App\EventSubscriber\DoctrineSubscriber:
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+    App\EventSubscriber\SerializerSubscriber:
+        tags:
+            - { name: "jms_serializer.event_subscriber" }
+    # Generador de secuencia
+    App\Services\Core\SequenceGenerator\MySequenceGenerator:
+        calls:
+            - [ setSequenceGenerator, ['@maximosojo_tools.sequence_generator'] ]   
+
+    # Generador de link en base a entidades            
+    App\Services\Core\LinkGenerator\MyLinkGenerator:
+        public: true
+        tags:
+            - { name: link_generator.item }
+
+    # IpTraceable
+    gedmo_doctrine_extensions.listener.ip_traceable:
+        class: Gedmo\IpTraceable\IpTraceableListener
+        public: false
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader,["@annotation_reader"] ]
+    App\EventSubscriber\IpTraceSubscriber:
+        arguments: ["@gedmo_doctrine_extensions.listener.ip_traceable"]
+        tags:
+            - { name: "kernel.event_subscriber" }
+
+    # Estadisticas
+    app.statistic_manager.user.adapter:
+        class: Maximosojo\ToolsBundle\Service\ObjectManager\StatisticManager\Adapter\DoctrineORMAdapter
+        arguments: ["App\\Entity\\S\\ObjectManager\\StatisticsManager\\User\\StatisticsYear","App\\Entity\\S\\ObjectManager\\StatisticsManager\\User\\StatisticsMonth","@doctrine.orm.second_entity_manager"]
+    app.statistic_manager.country.adapter:
+        class: Maximosojo\ToolsBundle\Service\ObjectManager\StatisticManager\Adapter\DoctrineORMAdapter
+        arguments: ["App\\Entity\\S\\ObjectManager\\StatisticsManager\\Country\\StatisticsYear","App\\Entity\\S\\ObjectManager\\StatisticsManager\\Country\\StatisticsMonth","@doctrine.orm.second_entity_manager"]
+
+    # Historiales
+    app.history_manager.user.adapter:
+        class: Maximosojo\ToolsBundle\Service\ObjectManager\HistoryManager\Adapter\DoctrineORMAdapter
+        arguments: ["App\\Entity\\S\\ObjectManager\\HistoryManager\\History","@doctrine.orm.second_entity_manager"]
+
+    # Sms
+    App\Services\Core\SmsService:
+        arguments: [{ env: "%kernel.environment%", disable_delivery: "%app.disable_delivery.sms%" }]
+        public: true
+
+    App\EventListener\UserResolveListener:
+        arguments:
+            - '@security.user_providers'
+            - '@security.password_hasher'
+        tags:
+            - { name: kernel.event_listener, event: league.oauth2_server.event.user_resolve, method: onUserResolve }

@@ -1,0 +1,15 @@
+validators.user.resetting.initialize.error: "Ya ha iniciado una recuperación de contraseña, verifique para continuar. Solicite una nueva en 24 horas."
+validators.phone.invalid: "El teléfono ingresado es invalido."
+validators.phone.invalid.nro: "El formato de número de teléfono %phoneNro% ingresado es invalido. Ejemplo de formato (%phoneExample%)."
+validators.phone.invalid.nro.unique: "El número de teléfono %phoneNro% ingresado ya se encuentra registrado."
+validators.country.not_blank: "El país es requerido."
+validators.password.strength: 'La contraseña es muy debil, debe contener mínimo 8 caracteres, un número y un caracter especial.'
+validators.password.too_short_message: 'La contraseña debe contener mínimo 8 caracteres.'
+validators.password.missing_letters_message: 'La contraseña debe contener mínimo 1 letra.'
+validators.password.missing_numbers_message: 'La contraseña debe contener mínimo 1 número.'
+validators.security.code.not_blank: "El código de validación es requerido."
+validators.security.code.invalid: "El código de validación es invalido."
+validators.security.code.used: "El código de validación ya fue usado."
+validators.security.code.is_not_usable: "El código de validación es erroneo."
+validators.security.phone.validated: "El teléfono ya se encuentra validado."
+validators.security.email.validated: "El correo electrónico ya se encuentra validado."

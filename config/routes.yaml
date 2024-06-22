@@ -1,0 +1,30 @@
+controllers:
+    resource:
+        path: '../src/Controller/'
+        namespace: App\Controller
+    type: attribute
+    # prefix: /{_locale}
+    # requirements:
+    #     _locale: '%app_locales%'
+    # defaults:
+    #     _locale: '%locale%'
+
+controllers_api:
+    resource:
+        path: '../src/Controller/A'
+        namespace: App\Controller\A
+    prefix: /api
+    type: attribute
+
+dh_auditor:
+    resource: "@DHAuditorBundle/Controller/"
+    type: auditor
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+
+maximosojo_baseadmin_all:
+    resource: '@BaseAdminBundle/config/routing/annotations/all.yaml'

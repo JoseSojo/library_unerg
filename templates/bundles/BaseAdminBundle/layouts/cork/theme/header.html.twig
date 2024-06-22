@@ -1,0 +1,10 @@
+{% extends '@!BaseAdmin/layouts/cork/theme/header.html.twig' %}
+
+{% block responsive_header_logo %}
+    <a href="{{ path('baseadmin_route_easyadmin_dashboard') }}">
+        <img src="{{asset('build/images/logo-ico-90x90.png')}}" class="navbar-logo" alt="logo">
+    </a>
+{% endblock responsive_header_logo %}
+
+{# {% block responsive_header_text %}
+{% endblock responsive_header_text %} #}

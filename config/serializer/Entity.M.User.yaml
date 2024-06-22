@@ -1,0 +1,49 @@
+App\Entity\M\User:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [user.id]
+        status:
+            expose: true
+            groups: [user.status]
+        firstname:
+            expose: true
+            groups: [user.firstname]
+        lastname:
+            expose: true
+            groups: [user.lastname]
+        identification:
+            expose: true
+            groups: [user.identification]
+        phone:
+            expose: true
+            groups: [user.phone]
+        address:
+            expose: true
+            groups: [user.address]
+        birthday:
+            expose: true
+            groups: [user.birthday]
+        country:
+            expose: true
+            groups: [user.country]
+        notificationsCount:
+            expose: true
+            groups: [user.notifications_count]
+        notifications:
+            expose: true
+            groups: [user.notifications]
+    virtual_properties:
+        getFullname:
+            serialized_name: fullname
+            groups: [user.fullname]
+            type: string
+        getEmail:
+            serialized_name: email
+            groups: [user.email]
+            type: string
+        getUsername:
+            serialized_name: username
+            groups: [user.username]
+            type: string

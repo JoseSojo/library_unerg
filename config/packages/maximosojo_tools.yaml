@@ -1,0 +1,56 @@
+maximosojo_tools:
+    loading:
+        color: "#3cbc4b"
+    table_prefix:
+        enabled: true
+        prefix: "db"
+        on_delete: RESTRICT
+    link_generator:
+        enabled: true
+        color: "#3cbc4b"
+    notifier:
+        mailer:
+            enabled: true
+            component_class: App\Entity\M\Core\Notifier\Mailer\Component
+            template_class: App\Entity\M\Core\Notifier\Mailer\Template
+            queue_class: App\Entity\M\Core\Notifier\Mailer\Queue        
+    paginator:
+        format_array: standard #default, standard ó dataTables
+    option_manager:
+        enabled: true
+    component:
+        liform:
+            enabled: true
+    object_manager:
+        document_manager:
+            enabled: true
+        statistics_manager:
+            enabled: true
+            object_types:
+                # Se agregan estadisticas de usuarios por monedas
+                - { objectType: User, adapter: app.statistic_manager.user.adapter, objectValids: ["UserRegister"] }
+                - { objectType: Country, adapter: app.statistic_manager.country.adapter, objectValids: ["UserRegister"] }
+        history_manager:
+            enabled: true
+            adapter: app.history_manager.user.adapter
+
+    command:
+        database:
+            clear:
+                truncate_entities:
+                    - pp_oauth_access_tokens
+                    - pp_users_group_user
+                delete_entities:
+                    - App\Entity\M\OAuth\AccessToken
+                    - App\Entity\M\OAuth\AuthCode
+                    - App\Entity\M\OAuth\Client
+                    - App\Entity\M\OAuth\OAuthApp
+                    - App\Entity\M\OAuth\OAuthApp\Permissions
+                    - App\Entity\M\OAuth\RefreshToken
+                    - App\Entity\M\User
+                    - App\Entity\M\User\Account
+
+when@test:
+    maximosojo_tools:
+        table_prefix:
+            on_delete: CASCADE

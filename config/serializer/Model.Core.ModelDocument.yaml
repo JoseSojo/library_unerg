@@ -1,0 +1,12 @@
+App\Model\Core\ModelDocument:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [document.id]
+        name:
+            expose: true
+            groups: [document.name]
+        path:
+            expose: true
+            groups: [document.path]

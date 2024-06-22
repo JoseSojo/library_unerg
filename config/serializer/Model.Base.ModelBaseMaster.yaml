@@ -1,0 +1,15 @@
+App\Model\Base\ModelBaseMaster:
+    exclusion_policy: ALL
+    properties:
+        id: 
+            expose: true
+            groups: [mm.id]
+        createdAt:
+            expose: true
+            groups: [mm.created_at]
+        updatedAt:
+            expose: true
+            groups: [mm.updated_at]
+        enabled: 
+            expose: true
+            groups: [mm.enabled]

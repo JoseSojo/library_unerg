@@ -1,0 +1,6 @@
+App\Model\User\ModelUser:
+    exclusion_policy: ALL
+    properties:
+        id:
+            expose: true
+            groups: [mm.id]

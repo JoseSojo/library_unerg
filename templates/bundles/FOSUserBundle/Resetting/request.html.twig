@@ -1,0 +1,11 @@
+{% extends '@BaseAdmin/layouts/cork/bundles/FOSUserBundle/Resetting/request.html.twig' %}
+
+{% block page_title %}{{ parent() }} | {{get_option_value("APP_NAME")}}{% endblock page_title %}
+
+{% block head_stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+    {{ encore_entry_link_tags('login') }}
+{% endblock head_stylesheets %}
+
+{% block head_javascript %}
+{% endblock head_javascript %}

@@ -1,0 +1,12 @@
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: App\Entity\M\User
+    from_email:
+        address: "%env(resolve:MAILER_USER)%"
+        sender_name: "%env(resolve:MAILER_USER)%"
+    service:
+        mailer: fos_user.mailer.noop
+    profile:
+        form:
+            type: Maximosojo\Bundle\BaseAdminBundle\Form\FOSUserBundle\ProfileFormType

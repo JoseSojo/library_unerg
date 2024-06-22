@@ -1,0 +1,17 @@
+default:
+    suites:
+        default:
+            contexts:
+                - App\Tests\Behat\DataContext
+                - App\Tests\Behat\OAuth2Context
+
+    extensions:
+        # FriendsOfBehat
+        FriendsOfBehat\SymfonyExtension:
+            kernel:
+                environment: test
+            bootstrap: tests/bootstrap.php
+        # MinkExtension
+        Behat\MinkExtension:
+            base_url: http://127.0.0.1:8000
+            symfony: ~

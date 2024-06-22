@@ -1,0 +1,15 @@
+App\Model\Base\ModelBase:
+    exclusion_policy: ALL
+    properties:
+        id: 
+            expose: true
+            groups: [mm.id]
+        createdBy:
+            expose: true
+            groups: [mm.created_by]
+        createdAt:
+            expose: true
+            groups: [mm.created_at]
+        updatedAt:
+            expose: true
+            groups: [mm.updated_at]

@@ -1,0 +1,161 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    enable_authenticator_manager: true
+    # encoders:
+    #     FOS\UserBundle\Model\UserInterface: bcrypt
+    password_hashers:
+        # Our user class and the algorithm we'll use to encode passwords
+        # 'auto' means to let Symfony choose the best possible password hasher (Argon2 or Bcrypt)
+        # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+
+    role_hierarchy:
+        # Panel App
+        ROLE_APP:
+            # PROFILE
+            - ROLE_APP_PROFILE_INDEX
+            - ROLE_APP_PROFILE_UPDATE
+            - ROLE_APP_PROFILE_UPDATE_PASSWORD
+
+        # Panel administrador
+        ROLE_ADMIN:
+            # USER
+            - ROLE_ADMIN_USER_PROFILE
+            - ROLE_ADMIN_USER_LIST
+            - ROLE_ADMIN_USER_SHOW
+            - ROLE_ADMIN_USER_CREATE
+            - ROLE_ADMIN_USER_UPDATE
+            - ROLE_ADMIN_USER_DELETE
+            - ROLE_ADMIN_USER_SEARCH
+
+            # USER_GROUP
+            - ROLE_ADMIN_USER_GROUP_PROFILE
+            - ROLE_ADMIN_USER_GROUP_LIST
+            - ROLE_ADMIN_USER_GROUP_SHOW
+            - ROLE_ADMIN_USER_GROUP_CREATE
+            - ROLE_ADMIN_USER_GROUP_UPDATE
+            - ROLE_ADMIN_USER_GROUP_DELETE
+            - ROLE_ADMIN_USER_GROUP_SEARCH
+
+            # USER_ACCOUNT
+            - ROLE_ADMIN_USER_ACCOUNT_PROFILE
+            - ROLE_ADMIN_USER_ACCOUNT_LIST
+            - ROLE_ADMIN_USER_ACCOUNT_SHOW
+            - ROLE_ADMIN_USER_ACCOUNT_CREATE
+            - ROLE_ADMIN_USER_ACCOUNT_UPDATE
+            - ROLE_ADMIN_USER_ACCOUNT_DELETE
+            - ROLE_ADMIN_USER_ACCOUNT_SEARCH
+
+            # USER_DEVICE
+            - ROLE_ADMIN_USER_DEVICE_PROFILE
+            - ROLE_ADMIN_USER_DEVICE_LIST
+            - ROLE_ADMIN_USER_DEVICE_SHOW
+            - ROLE_ADMIN_USER_DEVICE_CREATE
+            - ROLE_ADMIN_USER_DEVICE_UPDATE
+            - ROLE_ADMIN_USER_DEVICE_DELETE
+            - ROLE_ADMIN_USER_DEVICE_SEARCH
+
+            # EVENT
+            - ROLE_ADMIN_EVENT_LIST
+            - ROLE_ADMIN_EVENT_SHOW
+            - ROLE_ADMIN_EVENT_CREATE
+            - ROLE_ADMIN_EVENT_UPDATE
+            - ROLE_ADMIN_EVENT_DELETE
+            - ROLE_ADMIN_EVENT_SEARCH
+            # ENV
+            - ROLE_ADMIN_ENV_DEVELOPMENT
+            - ROLE_ADMIN_ENV_QUALITY
+            # ADMIN
+            - ROLE_ADMIN_EASYADMIN
+            - ROLE_ADMIN_EASYAUDIT
+
+            # WORKS
+            - ROLE_ADMIN_WORK_LIST
+            - ROLE_ADMIN_WORK_SHOW
+            - ROLE_ADMIN_WORK_CREATE
+            - ROLE_ADMIN_WORK_UPDATE
+            - ROLE_ADMIN_WORK_DELETE
+            - ROLE_ADMIN_WORK_SEARCH
+
+            # WORK_CATEGORY
+            - ROLE_ADMIN_WORK_CATEGORY_LIST
+            - ROLE_ADMIN_WORK_CATEGORY_SHOW
+            - ROLE_ADMIN_WORK_CATEGORY_CREATE
+            - ROLE_ADMIN_WORK_CATEGORY_UPDATE
+            - ROLE_ADMIN_WORK_CATEGORY_DELETE
+            - ROLE_ADMIN_WORK_CATEGORY_SEARCH
+
+        ROLE_SUPER_ADMIN: [ROLE_APP,ROLE_ADMIN]
+        
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username_email
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        login_firewall:
+            pattern: ^/(resetting)
+            # anonymous: true
+            security:   false
+
+        api_token:
+            pattern: ^/token$
+            security: false
+
+        api:
+            pattern: ^/api
+            security: true
+            stateless: true
+            oauth2: true
+
+        main:
+            lazy: true
+            pattern: ^/
+            # switch_user: { role: ROLE_APP_USER_SWITCH }
+            provider: fos_userbundle
+            form_login:
+                # use_forward:    false
+                # The route name that the login form submits to
+                # check_path: fos_user_security_check
+                # The name of the route where the login form lives
+                # When the user tries to access a protected page, they are redirected here
+                login_path: fos_user_security_login
+                # Secure the login form against CSRF
+                # Reference: https://symfony.com/doc/current/security/csrf.html
+                enable_csrf: true
+                # The page users are redirect to when there is no previous page stored in the
+                # session (for example when the users access directly to the login page).
+                default_target_path: easyadmin
+
+            logout:
+                # The route name the user can go to in order to logout
+                path: fos_user_security_logout
+                # The name of the route to redirect to after logging out
+                target: fos_user_security_login
+                # Secure the logout against CSRF
+                enable_csrf: false
+
+            # anonymous:  true
+            # security: false
+            entry_point: 'form_login'
+
+    access_control:
+        - { path: ^/login$, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/request, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/send-email, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/check-email, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/reset/, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+
+        # API
+        - { path: ^/api/(register|resetting|explore|home), roles: [ PUBLIC_ACCESS ], requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+
+        # SESSION
+        - { path: ^/easyadmin, role: ROLE_ADMIN_EASYADMIN, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/, role: IS_AUTHENTICATED_FULLY, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }

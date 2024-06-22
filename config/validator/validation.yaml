@@ -1,0 +1,114 @@
+App\Entity\M\User:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [email]
+            groups: [registration,updateEmail]
+            message: validators.email.unique
+        #- App\Validator\Constraints\User\Phone:
+        #    groups: [registration,updatePhone]
+    properties:
+        email:
+            - NotBlank:
+                message: validators.email.not_blank
+                groups: [preRegistration,preUpdateEmail]
+            - Length:
+                min: 3
+                minMessage: fos_user.email.short
+                max: 254
+                maxMessage: fos_user.email.long
+                groups: [preRegistration,preUpdateEmail]
+            - Regex:
+                pattern: '/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD'
+                message: fos_user.email.invalid
+                groups: [preRegistration,preUpdateEmail]
+        #phone:
+        #    - NotBlank:
+        #        message: validators.phone.not_blank
+        #        groups: [preRegistration,preUpdatePhone]
+        firstname:
+            - NotBlank:
+                message: validators.firstname.not_blank
+                groups: [preRegistration,preUpdate]
+        lastname:
+            - NotBlank:
+                message: validators.lastname.not_blank
+                groups: [preRegistration,preUpdate]
+        country:
+           - NotBlank:
+               message: validators.country.not_blank
+               groups: [preRegistration,preUpdateAddress]
+        plainPassword:
+            - NotBlank:
+                message: validators.password.not_blank
+                groups: [preRegistration,preResetting]
+            - Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements:
+                minLength: 8
+                requireLetters: true
+                requireNumbers: true
+                requireCaseDiff: false
+                requireSpecialCharacter: true
+                tooShortMessage: validators.password.too_short_message
+                missingLettersMessage: validators.password.missing_letters_message
+                requireCaseDiffMessage: validators.password.strength
+                missingNumbersMessage: validators.password.missing_numbers_message
+                missingSpecialCharacterMessage: validators.password.strength
+                groups: [preRegistration,updatePassword,resetting]
+        city:
+           - NotBlank:
+               message: validators.city.not_blank
+               groups: [preUpdateAddress]
+        postalCode:
+           - NotBlank:
+               message: validators.postal_code.not_blank
+               groups: [preUpdateAddress]
+        address:
+           - NotBlank:
+               message: validators.address.not_blank
+               groups: [preUpdateAddress]
+        #birthday:
+        #   - NotBlank:
+        #       message: validators.user.birthday.not_blank
+        #       groups: [preUpdate]
+        currentPassword:
+            - NotBlank:
+                message: validators.user.password.current_password.not_blank
+                groups: [preUpdatePassword]
+        plainPasswordFirst:
+            - NotBlank:
+                message: validators.user.password.plain_password_first.not_blank
+                groups: [preUpdatePassword]
+            - Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements:
+                minLength: 8
+                requireLetters: true
+                requireNumbers: true
+                requireCaseDiff: false
+                requireSpecialCharacter: true
+                tooShortMessage: validators.password.too_short_message
+                missingLettersMessage: validators.password.missing_letters_message
+                requireCaseDiffMessage: validators.password.strength
+                missingNumbersMessage: validators.password.missing_numbers_message
+                missingSpecialCharacterMessage: validators.password.strength
+                groups: [preUpdatePassword]
+        plainPasswordSecond:
+            - NotBlank:
+                message: validators.user.password.plain_password_second.not_blank
+                groups: [preUpdatePassword]
+App\Model\User\Security\ModelResetting:
+    constraints:
+        - App\Validator\Constraints\User\Security\Resetting\UsernameEmail:
+            groups: [resettingUsernameEmail]
+    properties:
+        username:
+            - NotBlank:
+                message: validators.user.email.not_blank
+                groups: [preResettingUsernameEmail]
+            - Length:
+                min: 3
+                minMessage: fos_user.email.short
+                max: 254
+                maxMessage: fos_user.email.long
+                groups: [preResettingUsernameEmail]
+            - Regex:
+                pattern: '/^(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){255,})(?!(?:(?:\x22?\x5C[\x00-\x7E]\x22?)|(?:\x22?[^\x5C\x22]\x22?)){65,}@)(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22))(?:\.(?:(?:[\x21\x23-\x27\x2A\x2B\x2D\x2F-\x39\x3D\x3F\x5E-\x7E]+)|(?:\x22(?:[\x01-\x08\x0B\x0C\x0E-\x1F\x21\x23-\x5B\x5D-\x7F]|(?:\x5C[\x00-\x7F]))*\x22)))*@(?:(?:(?!.*[^.]{64,})(?:(?:(?:xn--)?[a-z0-9]+(?:-[a-z0-9]+)*\.){1,126}){1,}(?:(?:[a-z][a-z0-9]*)|(?:(?:xn--)[a-z0-9]+))(?:-[a-z0-9]+)*)|(?:\[(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){7})|(?:(?!(?:.*[a-f0-9][:\]]){7,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,5})?)))|(?:(?:IPv6:(?:(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){5}:)|(?:(?!(?:.*[a-f0-9]:){5,})(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3})?::(?:[a-f0-9]{1,4}(?::[a-f0-9]{1,4}){0,3}:)?)))?(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))(?:\.(?:(?:25[0-5])|(?:2[0-4][0-9])|(?:1[0-9]{2})|(?:[1-9]?[0-9]))){3}))\]))$/iD'
+                message: fos_user.email.invalid
+                groups: [preResettingUsernameEmail]
