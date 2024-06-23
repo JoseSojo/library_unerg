@@ -3,7 +3,7 @@
 namespace App\Repository\M\Trabajo;
 
 use App\Entity\M\Trabajo\Trabajo;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

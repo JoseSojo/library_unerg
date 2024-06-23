@@ -13,9 +13,20 @@ namespace App\Repository;
 abstract class ServiceEntityRepository extends \Maximosojo\ToolsBundle\ORM\ServiceEntityRepository
 {
     use EntityRepositoryTrait;
-    
+
     public function getFormatPaginator()
     {
         return \Maximosojo\ToolsBundle\Model\Paginator\Paginator::FORMAT_ARRAY_STANDARD;
+    }
+
+    public function countAll(array $criteria = array())
+    {
+        $criteria = $this->parseCriteria($criteria);
+
+        $a = $this->getAlias();
+        $qb = $this->createQueryBuilder($a);
+        $qb->select(sprintf("count(%s.id)",$a));
+
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

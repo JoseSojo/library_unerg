@@ -4,11 +4,7 @@ namespace App\Model;
 
 use Maximosojo\Bundle\BaseAdminBundle\Model\EasyAdminBuilder as BaseEasyAdminBuilder;
 use App\Entity\M\Group;
-use App\Entity\M\Core\Notifier\Mailer\Component;
-use App\Entity\M\Core\Notifier\Mailer\Template;
-use App\Entity\M\Master\Term;
 use App\Entity\M\User;
-use App\Entity\M\User\MobileDevice;
 use App\Entity\M\Trabajo\Trabajo;
 use App\Entity\M\Master\Trabajo\Category;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -52,7 +48,6 @@ class EasyAdminBuilder extends BaseEasyAdminBuilder
         $menuUser = [
             MenuItem::linkToCrud('User', '', User::class)->setPermission('ROLE_ADMIN_USER_LIST'),
             MenuItem::linkToCrud('UserGroup', '', Group::class)->setPermission('ROLE_ADMIN_USER_GROUP_LIST'),
-            // MenuItem::linkToCrud('MobileDevice', '', MobileDevice::class)->setPermission('ROLE_ADMIN_USER_DEVICE_LIST'),
         ];
 
         $menuTrabajo = [
@@ -61,19 +56,11 @@ class EasyAdminBuilder extends BaseEasyAdminBuilder
         ];
 
         $menuCore = [
-            MenuItem::linkToCrud('Option', '', Option::class),
-            // MenuItem::linkToCrud('Term', '', Term::class),
+            MenuItem::linkToCrud('Option', '', Option::class)->setPermission('ROLE_ADMIN_CORE_LIST'),
         ];
 
-        // $submenu5 = [
-        //     MenuItem::linkToCrud('MailerTemplate', '', Template::class),
-        //     MenuItem::linkToCrud('MailerComponent', '', Component::class),
-        // ];
-
         yield MenuItem::subMenu('menu.user', 'fas fa-users')->setSubItems($menuUser);
-        yield MenuItem::subMenu('menu.blog', 'fas fa-shield-alt')->setSubItems($menuTrabajo);
+        yield MenuItem::subMenu('menu.work', 'fas fa-shield-alt')->setSubItems($menuTrabajo);
         yield MenuItem::subMenu('menu.core', 'fas fa-cog')->setSubItems($menuCore);
-        // yield MenuItem::subMenu('menu.setting.email', 'fas fa-envelope')->setSubItems($submenu5);
-        // yield MenuItem::linktoRoute('Stats', 'fa fa-chart-bar', 'fos_user_profile_show')->setPermission('ROLE_ADMIN_sUSER_LIST');
     }
 }

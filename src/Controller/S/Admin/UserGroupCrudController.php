@@ -26,9 +26,9 @@ class UserGroupCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        $name = TextField::new('name');
-        $description = TextField::new('description');
-        $parents = AssociationField::new('parents');
+        $name = TextField::new('name')->setLabel('Nombre');
+        $description = TextField::new('description')->setLabel('Descripción');
+        // $parents = AssociationField::new('parents')->setLabel('Parent');
         // $roles = ArrayField::new('roles')->setTemplatePath('bundles/EasyAdminBundle/fields/field_roles.html.twig');
 
         $roles = self::getRoles($this->getParameter("security.role_hierarchy.roles"));

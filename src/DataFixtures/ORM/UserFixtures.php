@@ -11,19 +11,11 @@
 
 namespace App\DataFixtures\ORM;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\M\User;
-use App\Entity\M\User\MobileDevice;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use App\Services\User\UserManager;
 use App\DataFixtures\ORM\BaseFixtures;
 use League\Bundle\OAuth2ServerBundle\Manager\ClientManagerInterface;
-use League\Bundle\OAuth2ServerBundle\Model\AbstractClient;
-use League\Bundle\OAuth2ServerBundle\ValueObject\Grant;
-use League\Bundle\OAuth2ServerBundle\ValueObject\RedirectUri;
-use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
-use App\Entity\M\OAuth2\Client;
 
 class UserFixtures extends BaseFixtures
 {
@@ -50,18 +42,21 @@ class UserFixtures extends BaseFixtures
                 "firstname" => "Autor 1",
                 "lastname" => "UNERG",
                 "username" => "author01",
+                "identification" => "00000003",
                 "type" => User::TYPE_AUTHOR
             ],
             [
-                "firstname" => "Client",
-                "lastname" => "APP",
-                "username" => "client",
-                "type" => User::TYPE_ADMIN
+                "firstname" => "Autor 2",
+                "lastname" => "Libreria",
+                "username" => "author02",
+                "identification" => "00000002",
+                "type" => User::TYPE_AUTHOR
             ],
             [
                 "firstname" => "Super Admin",
                 "lastname" => "APP",
                 "username" => "superadmin",
+                "identification" => "00000001",
                 "superadmin" => true,
                 "type" => User::TYPE_ADMIN
             ],
@@ -69,6 +64,7 @@ class UserFixtures extends BaseFixtures
                 "firstname" => "Admin",
                 "lastname" => "APP",
                 "username" => "admin",
+                "identification" => "00000000",
                 "superadmin" => true,
                 "type" => User::TYPE_ADMIN
             ]
@@ -85,13 +81,12 @@ class UserFixtures extends BaseFixtures
             
             $username = $value["username"];
             $email = sprintf("%s@example.com",$username);
-            
+            $user->setIdentification($value["identification"]);
             $user->setPlainPassword($password);
             $user->setEnabled(true);
             $user->setFirstname($value["firstname"]);
             $user->setLastname($value["lastname"]);
             $user->setType($value["type"]);
-            // $user->setCountry($this->getReference("COUNTRY-VE"));
             $user->setEmail($email);
             $user->setPhone(sprintf("424%s",\Maxtoan\Common\Util\StringUtil::getRamdomNumber(7)));
             $manager->persist($user);

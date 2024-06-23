@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
 
 class UserCrudController extends AbstractCrudController
 {
@@ -32,14 +33,7 @@ class UserCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions
-            ->add(Crud::PAGE_INDEX, Action::DETAIL)
-            ->remove(Crud::PAGE_INDEX, Action::NEW)
-            // ->remove(Crud::PAGE_INDEX, Action::EDIT)
-            ->remove(Crud::PAGE_INDEX, Action::DELETE)
-            // ->remove(Crud::PAGE_DETAIL, Action::EDIT)
-            ->remove(Crud::PAGE_DETAIL, Action::DELETE)
-        ;
+        $actions;
 
         return parent::configureActions($actions)
             ->setPermission(Action::INDEX,'ROLE_ADMIN_USER_LIST')
@@ -52,33 +46,42 @@ class UserCrudController extends AbstractCrudController
     {
         $fieldsetDetails = FormField::addFieldset('User Details');
 
-        $firstname = TextField::new('firstname')->setColumns(6);
-        $lastname = TextField::new('lastname')->setColumns(6);
-        $username = TextField::new('username')->setColumns(6);
-        $identification = TextField::new('identification')->setColumns(6);
-        $address = TextareaField::new('address')->setColumns(6);
-        $country = AssociationField::new('country')->setColumns(6);
-        $groups = AssociationField::new('groups')->setColumns(6);
-        $enabled = Field::new('enabled')->setColumns(6);
-        $locked = Field::new('locked')->setColumns(6);
-        $locale = TextField::new('locale')->setColumns(6);
-        $timezone = TextField::new('timezone')->setColumns(6);
-        $lastLogin = DateTimeField::new('lastLogin')->setColumns(6);
-        $passwordRequestedAt = DateTimeField::new('passwordRequestedAt')->setColumns(6);
-        $createdAt = DateTimeField::new('createdAt')->setColumns(6);
-        $createdBy = AssociationField::new('createdBy')->setColumns(6);
-        $updatedAt = DateTimeField::new('updatedAt')->setColumns(6);
-        $updatedBy = AssociationField::new('updatedBy')->setColumns(6);
-        $email = TextField::new('email')->setColumns(6);
+        $firstname = TextField::new('firstname')->setColumns(6)->setLabel('Nombre');
+        $lastname = TextField::new('lastname')->setColumns(6)->setLabel('Apellido');
+        $username = TextField::new('username')->setColumns(6)->setLabel('Usuario');
+        $identification = TextField::new('identification')->setColumns(6)->setLabel('Identificación');
+        $address = TextareaField::new('address')->setColumns(12)->setLabel('Dirección');
+        $groups = AssociationField::new('groups')->setColumns(6)->setLabel('Permiso');
+        $enabled = Field::new('enabled')->setColumns(6)->setLabel('Activo');
+        $locked = Field::new('locked')->setColumns(6)->setLabel('Bloqueado');
+        $lastLogin = DateTimeField::new('lastLogin')->setColumns(6)->setLabel('Ultima sesión');
+        $passwordRequestedAt = DateTimeField::new('passwordRequestedAt')->setColumns(6)->setLabel('Petición contraseña');
+        $createdAt = DateTimeField::new('createdAt')->setColumns(6)->setLabel('Creado el');
+        $createdBy = AssociationField::new('createdBy')->setColumns(6)->setLabel('Creado por');
+        $updatedAt = DateTimeField::new('updatedAt')->setColumns(6)->setLabel('Actualizado el');
+        $updatedBy = AssociationField::new('updatedBy')->setColumns(6)->setLabel('Actualizado por');
+        $email = TextField::new('email')->setColumns(6)->setLabel('Correo');
+
+        $password = TextField::new('password')
+            ->setColumns(12)
+            ->setFormType(RepeatedType::class)
+            ->setFormTypeOptions([
+                'type' => PasswordType::class,
+                'first_options' => [ 'label' => 'Password' ],
+                'second_options' => [ 'label' => 'Repeat Password' ]
+            ])
+            ->setRequired($pageName === Crud::PAGE_NEW)
+            ->onlyOnForms()
+            ;
 
         if (Crud::PAGE_INDEX === $pageName) {
-            return [$firstname, $lastname, $email, $enabled, $locked];
+            return [$identification, $firstname, $lastname, $email];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
-            return [$firstname, $lastname, $username, $email, $identification, $address, $country, $groups, $enabled, $locked, $locale, $timezone, $lastLogin, $passwordRequestedAt, $createdAt, $createdBy, $updatedAt, $updatedBy];
+            return [$firstname, $lastname, $username, $email, $groups, $address, $enabled, $locked, $lastLogin, $passwordRequestedAt, $createdAt, $createdBy, $updatedAt, $updatedBy];
         } elseif (Crud::PAGE_NEW === $pageName) {
-            return [$firstname, $lastname, $username, $email, $identification, $address, $country, $groups, $enabled, $locked];
+            return [$firstname, $lastname, $username, $email, $groups, $identification, $password, $enabled, $locked, $address,];
         } elseif (Crud::PAGE_EDIT === $pageName) {
-            return [$fieldsetDetails, $firstname, $lastname, $username, $email, $identification, $address, $country, $groups, $enabled, $locked];
+            return [$fieldsetDetails, $firstname, $lastname, $username, $email, $identification, $address, $groups, $enabled, $locked];
         }
     }
 }

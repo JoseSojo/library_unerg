@@ -38,37 +38,20 @@ security:
             - ROLE_ADMIN_USER_GROUP_DELETE
             - ROLE_ADMIN_USER_GROUP_SEARCH
 
-            # USER_ACCOUNT
-            - ROLE_ADMIN_USER_ACCOUNT_PROFILE
-            - ROLE_ADMIN_USER_ACCOUNT_LIST
-            - ROLE_ADMIN_USER_ACCOUNT_SHOW
-            - ROLE_ADMIN_USER_ACCOUNT_CREATE
-            - ROLE_ADMIN_USER_ACCOUNT_UPDATE
-            - ROLE_ADMIN_USER_ACCOUNT_DELETE
-            - ROLE_ADMIN_USER_ACCOUNT_SEARCH
-
-            # USER_DEVICE
-            - ROLE_ADMIN_USER_DEVICE_PROFILE
-            - ROLE_ADMIN_USER_DEVICE_LIST
-            - ROLE_ADMIN_USER_DEVICE_SHOW
-            - ROLE_ADMIN_USER_DEVICE_CREATE
-            - ROLE_ADMIN_USER_DEVICE_UPDATE
-            - ROLE_ADMIN_USER_DEVICE_DELETE
-            - ROLE_ADMIN_USER_DEVICE_SEARCH
-
-            # EVENT
-            - ROLE_ADMIN_EVENT_LIST
-            - ROLE_ADMIN_EVENT_SHOW
-            - ROLE_ADMIN_EVENT_CREATE
-            - ROLE_ADMIN_EVENT_UPDATE
-            - ROLE_ADMIN_EVENT_DELETE
-            - ROLE_ADMIN_EVENT_SEARCH
             # ENV
             - ROLE_ADMIN_ENV_DEVELOPMENT
             - ROLE_ADMIN_ENV_QUALITY
             # ADMIN
             - ROLE_ADMIN_EASYADMIN
             - ROLE_ADMIN_EASYAUDIT
+
+            # CORE
+            - ROLE_ADMIN_CORE_LIST
+            - ROLE_ADMIN_CORE_SHOW
+            - ROLE_ADMIN_CORE_UPDATE
+            - ROLE_ADMIN_CORE_CREATE
+            - ROLE_ADMIN_CORE_DELETE
+            - ROLE_ADMIN_CORE_SEARCH
 
             # WORKS
             - ROLE_ADMIN_WORK_LIST

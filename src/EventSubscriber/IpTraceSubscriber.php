@@ -3,30 +3,16 @@
 namespace App\EventSubscriber;
 
 use App\Entity\M\User;
-use FOS\OAuthServerBundle\Security\Authentication\Token\OAuthToken;
 use Gedmo\IpTraceable\IpTraceableListener;
 use LogicException;
-use Psr\Log\LoggerInterface;
-use ReCaptcha\ReCaptcha;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
-use Symfony\Component\Console\Event\ConsoleEvent;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Response;
-use FOS\UserBundle\Doctrine\UserManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Maximosojo\ToolsBundle\DependencyInjection\ContainerAwareTrait;
-use App\Services\Util\AppUtil;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 

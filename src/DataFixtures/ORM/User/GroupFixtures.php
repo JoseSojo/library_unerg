@@ -37,13 +37,9 @@ class GroupFixtures extends BaseFixtures
                 "ROLE_ADMIN_USER_GROUP_UPDATE",
                 "ROLE_ADMIN_USER_GROUP_DELETE",
                 "ROLE_ADMIN_USER_GROUP_SEARCH",
-                "ROLE_ADMIN_USER_DEVICE_PROFILE",
-                "ROLE_ADMIN_USER_DEVICE_LIST",
             ],
             "Autor" => [
-                "ROLE_API_PROFILE_INDEX",
-                "ROLE_API_PROFILE_UPDATE",
-                "ROLE_API_PROFILE_UPDATE_PASSWORD",
+                "ROLE_ADMIN_USER_PROFILE",
             ],
         ];
         

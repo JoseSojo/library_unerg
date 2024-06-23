@@ -33,10 +33,6 @@ class HistorySubscriber extends BaseSubscriber
             AppEvents::APP_USER_EMAIL_UPDATE_POST_SUCCESS => ['onDefaultHistory', $priority],
             AppEvents::APP_USER_PHONE_UPDATE_POST_SUCCESS => ['onDefaultHistory', $priority],
             AppEvents::APP_USER_PASSWORD_UPDATE_POST_SUCCESS => ['onDefaultHistory', $priority],
-            // AppEvents::APP_USER_EMAIL_VALIDATE_PRE_SUCCESS => ['onDefaultHistory', $priority],
-            // AppEvents::APP_USER_EMAIL_VALIDATE_POST_SUCCESS => ['onDefaultHistory', $priority],
-            // AppEvents::APP_USER_PHONE_VALIDATE_PRE_SUCCESS => ['onDefaultHistory', $priority],
-            // AppEvents::APP_USER_PHONE_VALIDATE_POST_SUCCESS => ['onDefaultHistory', $priority]
         ];
     }
 
@@ -50,10 +46,7 @@ class HistorySubscriber extends BaseSubscriber
         $entity = $event->getEntity();
         if ($entity instanceof User) {
             $user = $entity;
-        } elseif ($entity instanceof Business || $entity instanceof Bookmark) {
-            $user = $entity->getUser();
-        }
-
+        } 
 
         if (is_null($user)) {
             return;
@@ -69,36 +62,5 @@ class HistorySubscriber extends BaseSubscriber
             "description" => "title.history.".$nameEvent
         ];
         $historyManager->create($array);
-    }
-
-    public function onBookmarkHistory(GenericEvent $event, $nameEvent)
-    {
-        $user = null;
-        $entity = $event->getEntity();
-        $business = $entity->getBusiness();
-
-        $historyManager = $this->objectDataManager->histories();
-        $historyManager->configure($business->getId(),Business::OBJECT_DATA_MANAGER);
-
-        $array = [
-            "eventName" => $nameEvent,
-            "type" => ModelHistory::TYPE_WARNING,
-            "user" => $entity->getUser(),
-            "description" => "title.history.".$nameEvent
-        ];
-        $historyManager->create($array);
-        // Registra historial de usuario
-        $this->onDefaultHistory($event,$nameEvent);
-    }
-    
-    /**
-     * Registra manejador de objetos
-     *
-     * @param   ObjectDataManagerInterface  $objectDataManager
-     */
-    #[\Symfony\Contracts\Service\Attribute\Required]
-    public function setObjectDataManager(ObjectDataManagerInterface $objectDataManager)
-    {
-        $this->objectDataManager = $objectDataManager;
     }
 }

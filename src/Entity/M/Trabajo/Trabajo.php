@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Model\User\ModelTrabajo;
 use App\Entity\M\Master\Trabajo\Category;
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Traits\ORM\Basic\ExtraDataTrait;
 use App\Entity\M\Core\Document;
 
@@ -21,7 +20,7 @@ use App\Entity\M\Core\Document;
 class Trabajo extends ModelTrabajo
 {
     /**
-     * Imagen publicacion
+     * Documento
      * @var \App\Entity\M\Core\Document
      */
     #[ORM\OneToOne(targetEntity: 'App\Entity\M\Core\Document', cascade: ['persist'])]
