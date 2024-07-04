@@ -30,21 +30,6 @@ abstract class Controller extends AbstractFOSRestController
     use FOSRestViewTrait;
 
     public const ICON_EDIT = "edit";
-    public const ICON_ACCOUNT_CIRCLE = "account_circle";
-    public const ICON_ACTION = "arrow_forward_ios";
-    public const ICON_EXIT_TO_APP = "exit_to_app";
-    public const ICON_POWER_OFF = "power_off";
-    public const ICON_ADD_A_PHOTO = "add_a_photo";
-    public const ICON_ADD_COMMENT = "add_comment";
-    public const ICON_ADD_LOCATION = "add_location";
-    public const ICON_ADD_LOCATION_ALT = "add_location_alt";
-    public const ICON_SEARCH = "search";
-    public const ICON_BOOKMARK = "bookmark";
-    public const ICON_BOOKMARK_REMOVE = "bookmark_remove";
-    public const ICON_DIRECTIONS = "directions_rounded";
-    public const ICON_CHAT = "chat";
-    public const ICON_SHARE = "share";
-    public const ICON_LOCK = "lock";
     
     /**
      * setTitle

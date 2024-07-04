@@ -1,0 +1,5 @@
+easeadmin:
+    fields:
+        download_pdf:
+            type: easeadmin.field.download_pdf
+            route: download_pdf_action

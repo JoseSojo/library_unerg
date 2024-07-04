@@ -12,9 +12,9 @@ abstract class ModelType
     /**
      * Object Data
      */
-    public const OBJECT_DATA_MANAGER = "PostType";
-
-    public const ID_TESIS = "tesis";
-    public const ID_TRABAJO = "trabajo";
-    public const ID_DOCTORAL = "doctoral";
+    public const OBJECT_DATA_MANAGER = "_program_id";
+    
+    public const ID_TEG = "TEG";
+    public const ID_TG = "TG";
+    public const ID_TD = "TD";
 }

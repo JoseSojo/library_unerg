@@ -23,8 +23,8 @@ abstract class ModelUser extends BaseUser implements ModelBaseInterface
      * Tipos de usuarios
      */
     const TYPE_ADMIN = "admin";
+    const TYPE_COORDINADOR = "coordinador";
     const TYPE_AUTHOR = "author";
-    const TYPE_USER = "user";
 
 	#[ORM\Id]
     #[ORM\Column(name: 'id', type: 'string', length: 36)]
@@ -50,58 +50,7 @@ abstract class ModelUser extends BaseUser implements ModelBaseInterface
     {
         return $this->id;
     }
-
-    public function isStatus($status)
-    {
-        return $this->getStatus() === $status;
-    }
-
-    public function getStatusArray()
-    {
-        $array = [
-            "label.status.user.not_validated" => self::STATUS_NOT_VALIDATED,
-            "label.status.user.invalidated" => self::STATUS_INVALIDATED,
-            "label.status.user.validated" => self::STATUS_VALIDATED,
-            "label.status.user.pending" => self::STATUS_PENDING
-        ];
-
-        return $array;
-    }
-
-    public function getStatusArrayValidated()
-    {
-        $array = [
-            "label.status.user.invalidated" => self::STATUS_INVALIDATED,
-            "label.status.user.validated" => self::STATUS_VALIDATED
-        ];
-
-        return $array;
-    }
-
-    public function getColorsArray()
-    {
-        $array = [
-            sprintf("warning %s",self::STATUS_NOT_VALIDATED) => self::STATUS_NOT_VALIDATED,
-            sprintf("success %s",self::STATUS_VALIDATED) => self::STATUS_VALIDATED,
-            sprintf("danger %s",self::STATUS_INVALIDATED) => self::STATUS_INVALIDATED,
-            sprintf("info %s",self::STATUS_PENDING) => self::STATUS_PENDING
-        ];
-
-        return $array;
-    }
-
-    public function getStatusColor()
-    {
-        $colorArray = self::getColorsArray();
-        return $colorArray === null ? : array_search($this->getStatus(),$colorArray);
-    }
-
-    public function getStatusLabel()
-    {
-        $statusArray = self::getStatusArray();
-        return $statusArray === null ? : array_search($this->getStatus(),$statusArray);
-    }
-
+    
     public function getAge()
     {
         $age = 0;

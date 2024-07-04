@@ -21,6 +21,30 @@ class TrabajoRepository extends ServiceEntityRepository
         parent::__construct($registry, Trabajo::class);
     }
 
+    public function findSearchWork($filter)
+    {
+        var_dump($filter);
+        die();
+        return $this->createQueryBuilder('w')
+            ->where(
+                'w.public = true'
+            )
+            ->orderBy('w.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }    
+
+    public function findRecendWork()
+    {
+        return $this->createQueryBuilder('w')
+            ->where('w.public = true')
+            ->orderBy('w.createdAt', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    } 
+
 //    /**
 //     * @return Post[] Returns an array of Post objects
 //     */

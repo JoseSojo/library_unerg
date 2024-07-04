@@ -3,9 +3,12 @@
 namespace App\Controller\S\Admin;
 
 use App\Entity\M\Group;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -24,6 +27,14 @@ class UserGroupCrudController extends AbstractCrudController
             ->setPaginatorPageSize(10);
     }
 
+    public function configureActions(Actions $actions): Actions
+    {
+        $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ;
+        return parent::configureActions($actions);
+    }
+
     public function configureFields(string $pageName): iterable
     {
         $name = TextField::new('name')->setLabel('Nombre');
@@ -34,7 +45,6 @@ class UserGroupCrudController extends AbstractCrudController
         $roles = self::getRoles($this->getParameter("security.role_hierarchy.roles"));
         unset($roles["ROLE_ADMIN"]);
         unset($roles["ROLE_SUPER_ADMIN"]);
-        unset($roles["ROLE_USER"]);
 
         $roles = ChoiceField::new('roles')->setChoices($roles)->renderExpanded()->allowMultipleChoices();
 

@@ -4,7 +4,7 @@ namespace App\Model\Core;
 
 use App\Model\Base\ModelBase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Service\Util\StringUtil;
+use App\Services\Util\StringUtil;
 
 /**
  * Base de documentos
@@ -77,7 +77,7 @@ abstract class ModelDocument extends ModelBase
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        $uploadPath = __DIR__.'/../../../var/'.$this->getUploadDir();
+        $uploadPath = __DIR__.'/../../../public/'.$this->getUploadDir();
         if(!is_dir($uploadPath)){
             mkdir($uploadPath, 0777, true);
         }
@@ -88,10 +88,10 @@ abstract class ModelDocument extends ModelBase
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        $dir = 'uploads/';
-        if($this->id && !empty($this->subDir)){
-            $dir = $dir.$this->subDir;
-        }
+        $dir = 'upload/';
+        // if($this->id && !empty($this->subDir)){
+        //     $dir = $dir.$this->subDir;
+        // }
         return $dir;
     }
 }

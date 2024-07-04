@@ -37,13 +37,12 @@ class User extends ModelUser
     #[ORM\Column(type: 'string', nullable: true, length: 20)]
     private $identification;
 
-    /**
-     * Country
-     * @var \App\Entity\M\Master\Term
-     */
-    #[ORM\ManyToOne(targetEntity: '\App\Entity\M\Master\Term')]
-    #[ORM\JoinColumn(nullable: true)]
-    private $country;
+    // /**
+    //  * Country
+    //  * @var string
+    //  */
+    // #[ORM\Column(type: 'string', nullable: true, length: 20)]
+    // private $country;
 
     /**
      * Ciudad
@@ -81,14 +80,8 @@ class User extends ModelUser
      * Tipo
      * @var string
      */
-    #[ORM\Column(type: 'string', length: 10)]
-    private $type = self::TYPE_USER;
-
-    /**
-     * @var integer
-     */
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private $notificationsCount;
+    #[ORM\Column(type: 'string', length: 30)]
+    private $type;
 
     /**
      * @var string
@@ -105,7 +98,11 @@ class User extends ModelUser
     public function __construct()
     {
         parent::__construct();
+        $this->groups = new ArrayCollection();
         $this->timezone = 'America/Caracas';
+        $this->enabled = true;
+        $this->locked = false;
+        $this->type = User::ROLE_DEFAULT;
     }
 
     public function getFullName()
@@ -141,10 +138,6 @@ class User extends ModelUser
     public function setEmail($email)
     {
         $this->email = $email;
-        // Añade email como nombre de usuario
-        if (is_null($email) == false) {
-            $this->username = $email;    
-        }
         
         return $this;
     }
@@ -179,7 +172,7 @@ class User extends ModelUser
         $this->city = $city;
 
         return $this;
-    }
+    }    
 
     public function getPostalCode(): ?string
     {
@@ -229,18 +222,6 @@ class User extends ModelUser
         return $this;
     }
 
-    public function getNotificationsCount(): ?int
-    {
-        return $this->notificationsCount;
-    }
-
-    public function setNotificationsCount(?int $notificationsCount): static
-    {
-        $this->notificationsCount = $notificationsCount;
-
-        return $this;
-    }
-
     public function getAvatar(): ?string
     {
         return $this->avatar;
@@ -265,15 +246,15 @@ class User extends ModelUser
         return $this;
     }
 
-    public function getCountry(): ?Term
-    {
-        return $this->country;
-    }
+    // public function getCountry(): string
+    // {
+    //     return $this->country;
+    // }
 
-    public function setCountry(?Term $country): static
-    {
-        $this->country = $country;
+    // public function setCountry(string $country): static
+    // {
+    //     $this->country = $country;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 }

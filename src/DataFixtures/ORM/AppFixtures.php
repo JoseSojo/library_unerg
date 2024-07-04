@@ -39,7 +39,7 @@ class AppFixtures extends BaseFixtures
                 "description" => "Nombre de la aplicación."
             ],
             "APP_DESCRIPTION" => [
-                "value" => "Biblioteca unerg",
+                "value" => "Biblioteca postgrado unerg",
                 "description" => "Descripción de la aplicación."
             ],
             "APP_LOCALE" => [

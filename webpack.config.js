@@ -12,6 +12,7 @@ Encore
 
     // REACT
     .enableReactPreset()
+    .enablePostCssLoader()
 
 
     .enableSingleRuntimeChunk()

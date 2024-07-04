@@ -7,6 +7,8 @@ use App\Entity\M\Group;
 use App\Entity\M\User;
 use App\Entity\M\Trabajo\Trabajo;
 use App\Entity\M\Master\Trabajo\Category;
+use App\Entity\M\Master\Trabajo\Program;
+use App\Entity\M\Master\Trabajo\InvestigationLine;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -53,6 +55,8 @@ class EasyAdminBuilder extends BaseEasyAdminBuilder
         $menuTrabajo = [
             MenuItem::linkToCrud('Work', '', Trabajo::class)->setPermission('ROLE_ADMIN_WORK_LIST'),
             MenuItem::linkToCrud('Category', '', Category::class)->setPermission('ROLE_ADMIN_WORK_CATEGORY_LIST'),
+            MenuItem::linkToCrud('Program', '', Program::class)->setPermission('ROLE_ADMIN_WORK_PROGRAM_LIST'),
+            MenuItem::linkToCrud('InvestigationLine', '', InvestigationLine::class)->setPermission('ROLE_ADMIN_WORK_INVESTIGATION_LINE_LIST')
         ];
 
         $menuCore = [
@@ -62,5 +66,6 @@ class EasyAdminBuilder extends BaseEasyAdminBuilder
         yield MenuItem::subMenu('menu.user', 'fas fa-users')->setSubItems($menuUser);
         yield MenuItem::subMenu('menu.work', 'fas fa-shield-alt')->setSubItems($menuTrabajo);
         yield MenuItem::subMenu('menu.core', 'fas fa-cog')->setSubItems($menuCore);
+        // yield MenuItem::linkToCrud('Work', '', Trabajo::class);
     }
 }

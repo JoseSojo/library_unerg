@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Traits\ORM\Basic\NameTrait;
 use App\Traits\ORM\SoftDeleteableTrait;
+use App\Traits\ORM\UserTrait;
 use App\Traits\ORM\EnableableTrait;
 use App\Traits\ORM\TimestampableTrait;
 
@@ -25,17 +26,10 @@ class Category extends ModelType
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'string', length: 20, nullable: false)]
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     protected $id;
 
-    /**
-     * @var string
-     */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $processorId;
-
     use NameTrait;
-    use EnableableTrait;
     use SoftDeleteableTrait;
     use TimestampableTrait;
 
@@ -44,31 +38,14 @@ class Category extends ModelType
         return $this->name;
     }
 
-    /**
-     * Set id
-     *
-     * @param string $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
     public function getId(): ?string
     {
         return $this->id;
     }
 
-    public function getProcessorId(): ?string
+    public function setId(string $id): static
     {
-        return $this->processorId;
-    }
-
-    public function setProcessorId(string $processorId): static
-    {
-        $this->processorId = $processorId;
+        $this->id = $id;
 
         return $this;
     }

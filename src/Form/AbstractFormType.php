@@ -81,21 +81,4 @@ abstract class AbstractFormType extends AbstractType
 
         return $user;
     }
-
-    public function buildAmountAttr(Account $account, array $options = array())
-    {
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults([
-            'help' => null
-        ]);
-
-        $options = $resolver->resolve($options);
-
-        $attrs = [];
-        $attrs["class"] = "number-format";
-        $attrs["suffix"] = (string)$account->getCurrency();
-        $attrs["help"] = $this->trans($options["help"],[],"labels");
-
-        return $attrs;
-    }
 }

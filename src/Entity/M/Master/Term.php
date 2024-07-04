@@ -70,12 +70,10 @@ class Term implements PriorityInterface
     use DescriptionTrait;
     use EnableableTrait;
     use SoftDeleteableTrait;
-    use ExtraDataTrait;
     use PriorityTrait;
 
     public function __construct()
     {
-        $this->extraData = [];
         $this->childs = new ArrayCollection();
         $this->parents = new ArrayCollection();
     }

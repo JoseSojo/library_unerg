@@ -10,7 +10,7 @@ const MainSlideCategory = () => {
     const contextSeacrh = useSearch();
 
     return (
-        <div className="fixed h-screen flex flex-col flex-grow pt-5 overflow-y-auto bg-white">
+        <div className="fixed h-screen flex flex-col flex-grow pt-5 overflow-y-auto bg-white w-72">
             <div className="px-4 mt-6">
                 <Title customClass="text-md font-mono font-black text-gray-900" title="BIBLIOTECA UNERG" />
 
@@ -41,6 +41,7 @@ const MainSlideCategory = () => {
                             change={contextSeacrh.setRun}
                             name="Carreras"
                             valueSearch={contextSeacrh.run}
+                            list={contextSeacrh.programs}
                         />
 
                         <ButtonSearchBy />

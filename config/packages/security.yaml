@@ -69,7 +69,24 @@ security:
             - ROLE_ADMIN_WORK_CATEGORY_DELETE
             - ROLE_ADMIN_WORK_CATEGORY_SEARCH
 
+            # WORK_PROGRAM
+            - ROLE_ADMIN_WORK_PROGRAM_LIST
+            - ROLE_ADMIN_WORK_PROGRAM_SHOW
+            - ROLE_ADMIN_WORK_PROGRAM_CREATE
+            - ROLE_ADMIN_WORK_PROGRAM_UPDATE
+            - ROLE_ADMIN_WORK_PROGRAM_DELETE
+            - ROLE_ADMIN_WORK_PROGRAM_SEARCH
+
+            # WORK__INVESTIGATION_LINE
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_LIST
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_SHOW
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_CREATE
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_UPDATE
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_DELETE
+            - ROLE_ADMIN_WORK_INVESTIGATION_LINE_SEARCH
+
         ROLE_SUPER_ADMIN: [ROLE_APP,ROLE_ADMIN]
+        ROLE_COORDINADOR: [ROLE_APP,ROLE_ADMIN]
         
     providers:
         fos_userbundle:
@@ -92,9 +109,15 @@ security:
 
         api:
             pattern: ^/api
-            security: true
+            security: false
             stateless: true
-            oauth2: true
+            oauth2: false
+        
+        public:
+            pattern: ^/public
+            security: false
+            stateless: true
+            oauth2: false
 
         main:
             lazy: true
@@ -107,7 +130,7 @@ security:
                 # check_path: fos_user_security_check
                 # The name of the route where the login form lives
                 # When the user tries to access a protected page, they are redirected here
-                login_path: fos_user_security_login
+                login_path: baseadmin_route_library
                 # Secure the login form against CSRF
                 # Reference: https://symfony.com/doc/current/security/csrf.html
                 enable_csrf: true
@@ -140,5 +163,4 @@ security:
         - { path: ^/api, roles: [ IS_AUTHENTICATED_FULLY ], requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
 
         # SESSION
-        - { path: ^/easyadmin, role: ROLE_ADMIN_EASYADMIN, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
-        - { path: ^/, role: IS_AUTHENTICATED_FULLY, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }
+        - { path: ^/dashboard, role: PUBLIC_ACCESS, requires_channel: "%env(APP_REQUIRES_CHANNEL)%" }

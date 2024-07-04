@@ -21,6 +21,17 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function GetUserByParam(string $param)
+    {
+        return $this->createQueryBuilder('u')
+            ->where("u.firstname LIKE :firstname OR u.lastname LIKE :lastname OR u.username LIKE :username")
+            ->setParameter('firstname', '%'.$param.'%')
+            ->setParameter('lastname', '%'.$param.'%')
+            ->setParameter('username', '%'.$param.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * Paginador de usuarios 
      * 
@@ -67,6 +78,16 @@ class UserRepository extends ServiceEntityRepository
         return $this->getPaginator($qb);
     }
 
+    public function findAllByUsernameContains($char)
+    {
+        return $this->createQueryBuilder('u')
+            ->where("u.firstname LIKE :firstname OR u.lastname LIKE :lastname")
+            ->setParameter('firstname', '%'.$char.'%')
+            ->setParameter('lastname', '%'.$char.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
 	/**
 	 * Alias
 	 *  
@@ -75,6 +96,6 @@ class UserRepository extends ServiceEntityRepository
 	 */
     public function getAlias()
     {
-        return "u";
+        return "w";
     }
 }

@@ -33,5 +33,3 @@ import './images/logo.png';
 import './images/logo-ico-90x90.png';
 import './images/favicon.ico';
 import './images/avatar.png';
-
-alert(123);

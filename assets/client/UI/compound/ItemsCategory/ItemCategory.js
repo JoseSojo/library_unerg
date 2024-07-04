@@ -3,7 +3,7 @@ import Button from '../../atoms/Button/Button';
 import Textarea from '../../atoms/Textarea/Input';
 import { useSearch } from '../../../context/SearchContext';
 
-export default function ItemCategory({ name, change, valueSearch, ico }) {
+export default function ItemCategory({ name, change, valueSearch, ico, list }) {
     const [active, setActive] = useState(false);
     const ActiveController = () => setActive(!active);
 
@@ -20,13 +20,31 @@ export default function ItemCategory({ name, change, valueSearch, ico }) {
                 {name}
             </Button>
             {
-                active && 
+                active && <>
                 <Textarea 
                     change={change}
                     customClass={clsTextarea}
                     name="value"
                     value={valueSearch}
                 />
+                {
+                    list &&
+                    <ul>
+                        {
+                            list.map((item, i) => (
+                                <Button
+                                    customClass="w-full cursor-pointer text-center text-xs font-bold rounded-[20px] py-1 hover:text-white hover:bg-[#2c698d]"
+                                    click={()=> change(item.name)}
+                                    key={item.id}
+                                    type='button'
+                                >
+                                    {item.name}
+                                </Button>
+                            ))
+                        }
+                    </ul>
+                }
+            </>
             }
         </div>
     )

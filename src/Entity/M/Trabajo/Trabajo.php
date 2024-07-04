@@ -2,12 +2,20 @@
 
 namespace App\Entity\M\Trabajo;
 
+use App\Entity\M\Master\Trabajo\Program;
+use App\Traits\ORM\EnableableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use App\Model\User\ModelTrabajo;
 use App\Entity\M\Master\Trabajo\Category;
+use App\Entity\M\Master\Trabajo\InvestigationLine;
+use App\Entity\M\User;
+use App\Traits\ORM\UserTrait;
 use App\Traits\ORM\Basic\ExtraDataTrait;
 use App\Entity\M\Core\Document;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteable;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Gedmo\Timestampable\Traits\Timestampable;
 
 /**
  * Trabajo
@@ -24,8 +32,16 @@ class Trabajo extends ModelTrabajo
      * @var \App\Entity\M\Core\Document
      */
     #[ORM\OneToOne(targetEntity: 'App\Entity\M\Core\Document', cascade: ['persist'])]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(nullable: false)]
     private $document;
+
+    /**
+     * Resumen Documento
+     * @var \App\Entity\M\Core\Document
+     */
+    #[ORM\OneToOne(targetEntity: 'App\Entity\M\Core\Document', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private $resumenDoc;
 
     /**
      * Categoria
@@ -36,54 +52,79 @@ class Trabajo extends ModelTrabajo
     private $category;
 
     /**
-     * @var string
+     * InvestigationLineRepository
+     * @var \App\Entity\M\Master\Trabajo\InvestigationLine
      */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $authorName;
+    #[ORM\ManyToOne(targetEntity: 'App\Entity\M\Master\Trabajo\InvestigationLine')]
+    #[ORM\JoinTable(name: 'work_investigation_line_work', joinColumns: [new ORM\JoinColumn(name: 'investigation_line_id', referencedColumnName: 'id')], inverseJoinColumns: [new ORM\JoinColumn(name: 'investigation_line_id', referencedColumnName: 'id')])]
+    private $investigationLine;
 
     /**
-     * @var string
+     * InvestigationLineRepository
+     * @var \App\Entity\M\Master\Trabajo\InvestigationLine
      */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $authorLastname;
+    #[ORM\ManyToOne(targetEntity: 'App\Entity\M\Master\Trabajo\Program')]
+    #[ORM\JoinTable(name: 'work_program_work', joinColumns: [new ORM\JoinColumn(name: 'program_id', referencedColumnName: 'id')], inverseJoinColumns: [new ORM\JoinColumn(name: 'program_id', referencedColumnName: 'id')])]
+    private $program;
+
+    use UserTrait;
+    use EnableableTrait;
+    use SoftDeleteable;
+    use Timestampable;
 
     /**
-     * @var string
+     * ¿EL documento se puede descargar?
+     * @var boolean
      */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $authorCi;
+    #[ORM\Column(name: 'downloader', type: 'boolean')]
+    protected $downloader = true;
 
-    /**
-     * @var string
+     /**
+     * ¿EL objeto se puede utilizar por API?
+     * @var boolean
      */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $authorEmail;
-
-    /**
-     * @var string
-     */
-    #[ORM\Column(type: 'string', length: 255)]
-    private $title;
+    #[ORM\Column(name: 'public', type: 'boolean')]
+    protected $public = true;
 
     /**
      * @var string
      */
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $resumen;
+    private $keyword;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: 'datetime', length: 50)]
+    private $date;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 255, unique:true)]
+    private $title;
+
+    /**
+     * @var string
+     */
+    #[ORM\Column(type: 'string', length: 800, unique:true, nullable: true)]
+    private $resumenText;
     
     /**
      * @var string
      */
     #[ORM\Column(type: 'string', length: 20)]
     private $status = self::STATUS_IN_PROGRESS;
-    
-    use ExtraDataTrait;
 
     public function __construct()
     {
         // $this->category = new ArrayCollection();
         $this->status = self::STATUS_IN_PROGRESS;
-        $this->extraData = [];
+    }
+
+    public function __toString()
+    {
+        return $this->title;
     }
 
     public function getDocument(): ?Document
@@ -91,9 +132,33 @@ class Trabajo extends ModelTrabajo
         return $this->document;
     }
 
+    public function setResumenDoc(?Document $resumenDoc): static
+    {
+        $this->resumenDoc = $resumenDoc;
+
+        return $this;
+    }
+
+    public function getResumenDoc(): ?Document
+    {
+        return $this->resumenDoc;
+    }
+
     public function setDocument(?Document $document): static
     {
         $this->document = $document;
+
+        return $this;
+    }
+
+    public function getKeyword(): string
+    {
+        return $this->keyword;
+    }
+
+    public function setKeyword(string $keyword): static
+    {
+        $this->keyword = $keyword;
 
         return $this;
     }
@@ -110,50 +175,26 @@ class Trabajo extends ModelTrabajo
         return $this;
     }
 
-    public function getAuthorName(): ?string
+    public function getInvestigationLine(): ?InvestigationLine
     {
-        return $this->authorName;
+        return $this->investigationLine;
     }
 
-    public function setAuthorName(string $authorName)
+    public function setInvestigationLine(?InvestigationLine $investigationLine): static
     {
-        $this->authorName = $authorName;
+        $this->investigationLine = $investigationLine;
 
         return $this;
     }
 
-    public function getAuthorLastname(): ?string
+    public function getProgram(): ?Program
     {
-        return $this->authorLastname;
+        return $this->program;
     }
 
-    public function setAuthorLastname(string $authorLastname)
+    public function setProgram(?Program $program): static
     {
-        $this->authorLastname = $authorLastname;
-
-        return $this;
-    }
-
-    public function getAuthorCi(): ?string
-    {
-        return $this->authorCi;
-    }
-
-    public function setAuthorCi(string $authorCi)
-    {
-        $this->authorCi = $authorCi;
-
-        return $this;
-    }
-
-    public function getAuthorEmail(): ?string
-    {
-        return $this->authorEmail;
-    }
-
-    public function setAuthorEmail(string $authorEmail)
-    {
-        $this->authorEmail = $authorEmail;
+        $this->program = $program;
 
         return $this;
     }
@@ -170,14 +211,26 @@ class Trabajo extends ModelTrabajo
         return $this;
     }
 
-    public function getResumen(): ?string
+    public function getDate(): \DateTime
     {
-        return $this->resumen;
+        return $this->date;
     }
 
-    public function setResumen(?string $resumen)
+    public function setDate(\DateTime $date)
     {
-        $this->resumen = $resumen;
+        $this->date = $date;
+        // die();
+        return $this;
+    }
+
+    public function getResumenText(): ?string
+    {
+        return $this->resumenText;
+    }
+
+    public function setResumenText(?string $resumenText)
+    {
+        $this->resumenText = $resumenText;
 
         return $this;
     }
@@ -191,6 +244,68 @@ class Trabajo extends ModelTrabajo
     {
         $this->status = $status;
 
+        return $this;
+    }
+
+    /**
+     * Is downloader?
+     * @return boolean
+     */
+    public function isDownloader() 
+    {
+        return $this->downloader;
+    }
+    
+    /**
+     * Get downloader
+     *
+     * @return boolean
+     */
+    public function getDownloader()
+    {
+        return $this->downloader;
+    }
+
+    /**
+     * Set downloader
+     * @param boolean $downloader
+     * @return $this
+     */
+    public function setDownloader($downloader)
+    {
+        $this->downloader = (boolean)$downloader;
+        
+        return $this;
+    }
+
+    /**
+     * Is downloader?
+     * @return boolean
+     */
+    public function isPublic() 
+    {
+        return $this->public;
+    }
+    
+    /**
+     * Get public
+     *
+     * @return boolean
+     */
+    public function getPublic()
+    {
+        return $this->public;
+    }
+
+    /**
+     * Set public
+     * @param boolean $public
+     * @return $this
+     */
+    public function setPublic($public)
+    {
+        $this->public = (boolean)$public;
+        
         return $this;
     }
 }

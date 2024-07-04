@@ -4,7 +4,6 @@ export default function TagOrList({ tag, customClass=``, list }) {
 
     // modalLogic
     if(list) {
-        console.log(list);
         return (
             <>
                 {

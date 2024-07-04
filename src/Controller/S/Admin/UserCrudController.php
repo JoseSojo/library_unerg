@@ -3,20 +3,22 @@
 namespace App\Controller\S\Admin;
 
 use App\Entity\M\User;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\{Action, Actions, Crud, KeyValueStore};
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\{Field, IdField, DateField, DateTimeField, EmailField, TextField, TextareaField, AssociationField, FormField, NumberField};
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use Symfony\Component\Form\Extension\Core\Type\{PasswordType, RepeatedType};
+use Symfony\Component\Form\{FormBuilderInterface, FormEvent, FormEvents};
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 
 class UserCrudController extends AbstractCrudController
 {
+    public function __construct(
+        public UserPasswordHasherInterface $userPasswordHasher
+    ) {}
+
     public static function getEntityFqcn(): string
     {
         return User::class;
@@ -33,7 +35,9 @@ class UserCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        $actions;
+        $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ;
 
         return parent::configureActions($actions)
             ->setPermission(Action::INDEX,'ROLE_ADMIN_USER_LIST')
@@ -42,9 +46,21 @@ class UserCrudController extends AbstractCrudController
             ;
     }
 
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('username')
+            ->add('email')
+            ->add('firstname')
+            ->add('identification')
+        ;
+    }
+
     public function configureFields(string $pageName): iterable
     {
-        $fieldsetDetails = FormField::addFieldset('User Details');
+        $tabAuthor = FormField::addTab('Autor');
+        $tabWork = FormField::addTab('Trabajo');
+        $tabData = FormField::addTab('Datos Extra');
 
         $firstname = TextField::new('firstname')->setColumns(6)->setLabel('Nombre');
         $lastname = TextField::new('lastname')->setColumns(6)->setLabel('Apellido');
@@ -52,8 +68,8 @@ class UserCrudController extends AbstractCrudController
         $identification = TextField::new('identification')->setColumns(6)->setLabel('Identificación');
         $address = TextareaField::new('address')->setColumns(12)->setLabel('Dirección');
         $groups = AssociationField::new('groups')->setColumns(6)->setLabel('Permiso');
-        $enabled = Field::new('enabled')->setColumns(6)->setLabel('Activo');
-        $locked = Field::new('locked')->setColumns(6)->setLabel('Bloqueado');
+        // $enabled = Field::new('enabled')->setColumns(6)->setLabel('Activo');
+        //$locked = Field::new('locked')->setColumns(6)->setLabel('Bloqueado');
         $lastLogin = DateTimeField::new('lastLogin')->setColumns(6)->setLabel('Ultima sesión');
         $passwordRequestedAt = DateTimeField::new('passwordRequestedAt')->setColumns(6)->setLabel('Petición contraseña');
         $createdAt = DateTimeField::new('createdAt')->setColumns(6)->setLabel('Creado el');
@@ -63,12 +79,12 @@ class UserCrudController extends AbstractCrudController
         $email = TextField::new('email')->setColumns(6)->setLabel('Correo');
 
         $password = TextField::new('password')
-            ->setColumns(12)
+            ->setColumns(6)
             ->setFormType(RepeatedType::class)
             ->setFormTypeOptions([
                 'type' => PasswordType::class,
                 'first_options' => [ 'label' => 'Password' ],
-                'second_options' => [ 'label' => 'Repeat Password' ]
+                'second_options' => [ 'label' => 'Repeat Password' ],
             ])
             ->setRequired($pageName === Crud::PAGE_NEW)
             ->onlyOnForms()
@@ -77,11 +93,44 @@ class UserCrudController extends AbstractCrudController
         if (Crud::PAGE_INDEX === $pageName) {
             return [$identification, $firstname, $lastname, $email];
         } elseif (Crud::PAGE_DETAIL === $pageName) {
-            return [$firstname, $lastname, $username, $email, $groups, $address, $enabled, $locked, $lastLogin, $passwordRequestedAt, $createdAt, $createdBy, $updatedAt, $updatedBy];
+            return [$firstname, $lastname, $username, $email, $groups, $address, $lastLogin, $passwordRequestedAt, $createdAt, $createdBy, $updatedAt, $updatedBy];
         } elseif (Crud::PAGE_NEW === $pageName) {
-            return [$firstname, $lastname, $username, $email, $groups, $identification, $password, $enabled, $locked, $address,];
+            return [$firstname, $lastname, $username, $email, $groups, $identification, $password, $address,];
         } elseif (Crud::PAGE_EDIT === $pageName) {
-            return [$fieldsetDetails, $firstname, $lastname, $username, $email, $identification, $address, $groups, $enabled, $locked];
+            return [$firstname, $lastname, $username, $email, $identification, $groups, $password, $address];
         }
+    }
+
+    public function createNewFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    {
+        $formBuilder = parent::createNewFormBuilder($entityDto, $formOptions, $context);
+        return $this->addPasswordEventListener($formBuilder);
+    }
+
+    public function createEditFormBuilder(EntityDto $entityDto, KeyValueStore $formOptions, AdminContext $context): FormBuilderInterface
+    {
+        $formBuilder = parent::createEditFormBuilder($entityDto, $formOptions, $context);
+        return $this->addPasswordEventListener($formBuilder);
+    }
+
+    private function addPasswordEventListener(FormBuilderInterface $formBuilder): FormBuilderInterface
+    {
+        return $formBuilder->addEventListener(FormEvents::POST_SUBMIT, $this->hashPassword());
+    }
+
+    private function hashPassword() {
+        return function($event) {
+            $form = $event->getForm();
+            if (!$form->isValid()) {
+                return;
+            }
+            $password = $form->get('password')->getData();
+            if ($password === null) {
+                return;
+            }
+
+            $hash = $this->userPasswordHasher->hashPassword($this->getUser(), $password);
+            $form->getData()->setPassword($hash);
+        };
     }
 }

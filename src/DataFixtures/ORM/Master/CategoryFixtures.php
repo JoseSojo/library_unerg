@@ -19,23 +19,20 @@ class CategoryFixtures extends BaseFixtures
 {
     public function load(ObjectManager $manager)
     {
-        $tesis = new Category();
-        $tesis->setName("Tesis");
-        $tesis->setId(Category::ID_TESIS);        
-        $tesis->setProcessorId(Category::ID_TESIS);
-        $manager->persist($tesis);
+        $esp = new Category();
+        $esp->setName("Especialización");
+        $esp->setId(Category::ID_TEG);  
+        $manager->persist($esp);
 
-        $trabajo = new Category();
-        $trabajo->setName("Trabajo de grado");
-        $trabajo->setId(Category::ID_TRABAJO);        
-        $trabajo->setProcessorId(Category::ID_TRABAJO);
-        $manager->persist($trabajo);
+        $mgis = new Category();
+        $mgis->setName("Maestria");
+        $mgis->setId(Category::ID_TG);        
+        $manager->persist($mgis);
 
-        $doctoral = new Category();
-        $doctoral->setName("Tesis Doctoral");
-        $doctoral->setId(Category::ID_DOCTORAL);        
-        $doctoral->setProcessorId(Category::ID_DOCTORAL);
-        $manager->persist($doctoral);
+        $doc = new Category();
+        $doc->setName("Doctorado");
+        $doc->setId(Category::ID_TD);        
+        $manager->persist($doc);
 
         $manager->flush();
     }

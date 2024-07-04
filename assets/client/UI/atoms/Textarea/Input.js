@@ -3,15 +3,17 @@ import React from 'react';
 const Textarea = ({ customClass, change=()=>{}, name, value,placeholder=`` }) => {
 
     const ChageController = (e) => { 
-        if(change) change(e.target.value)
+        if(change) change(e.target.value);
     };
 
     return <textarea
+        defaultValue={value}
+        value={value}
         name={name}
         placeholder={placeholder}
         onChange={ChageController}
         className={`${customClass}`}
-    >{value}</textarea>
+    ></textarea>
 }
 
 export default Textarea;

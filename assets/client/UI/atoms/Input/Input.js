@@ -1,10 +1,11 @@
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 const Input = ({ customClass, type=`text`, change, name, value }) => {
 
-    const ChageController = (e) => change ? change(e.target.value) : null;
+    const ChageController = (e) => change(e.target.value);
 
-    return <input 
+    return <Form.Control 
         type={type}
         name={name}
         onChange={ChageController}

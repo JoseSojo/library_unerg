@@ -43,6 +43,10 @@ services:
         tags:
             - { name: easyadmin_builder.builder, alias: main }
 
+    app.pdf_service:
+        class: App\Services\PdfService
+        arguments: ['@var.dev']
+
     # DoctrineSubscriber
     App\EventSubscriber\DoctrineSubscriber:
         tags:

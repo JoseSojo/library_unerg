@@ -3,7 +3,6 @@
 namespace App\Entity\M\Core;
 
 use App\Model\Core\ModelDocument;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Services\Util\StringUtil;
@@ -18,7 +17,7 @@ use App\Services\Util\StringUtil;
 #[ORM\Table(name: 'core_documents')]
 class Document extends ModelDocument
 {
-    public const SUB_DIR = "/uploads";
+    public const SUB_DIR = "/uploads/";
 
     /**
      */
