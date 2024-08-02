@@ -37,12 +37,12 @@ class User extends ModelUser
     #[ORM\Column(type: 'string', nullable: true, length: 20)]
     private $identification;
 
-    // /**
-    //  * Country
-    //  * @var string
-    //  */
-    // #[ORM\Column(type: 'string', nullable: true, length: 20)]
-    // private $country;
+    /**
+     * Country
+     * @var string
+     */
+    #[ORM\Column(type: 'string', nullable: true, length: 20)]
+    private $country;
 
     /**
      * Ciudad
@@ -246,15 +246,15 @@ class User extends ModelUser
         return $this;
     }
 
-    // public function getCountry(): string
-    // {
-    //     return $this->country;
-    // }
+    public function getCountry(): string
+    {
+        return $this->country ? $this->country : "Venezuela";
+    }
 
-    // public function setCountry(string $country): static
-    // {
-    //     $this->country = $country;
+    public function setCountry(string $country): static
+    {
+        $this->country = $country;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

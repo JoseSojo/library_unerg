@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardBody, Col, Row } from 'react-bootstrap';
 import Button from '../../atoms/Button/Button';
+import { useModal } from '../../../context/ModalContext';
 
 export default function CardList({ data }) {
-
     const [date, setDate] = useState();
+    const modal = useModal();
 
-    useEffect(() => {
-        const dateObject = new Date(data.date.timestamp * 1000); // convert timestamp to milliseconds
-        const formattedDate = `${dateObject.toLocaleDateString()} ${dateObject.toLocaleTimeString()}`;
-        setDate(formattedDate);
-    }, [])
-
-    console.log(data.title, data.document.path);
+    const ClickController = () => {
+        modal.setWork(data);
+        modal.open();
+    }
 
     return (
         <Col xs={12} lg={6} className='mt-3'>
@@ -30,6 +28,7 @@ export default function CardList({ data }) {
                         <Col className='m-auto'>
                             <Button
                                 customClass="btn btn-primary"
+                                click={ClickController}
                             >
                                 ver
                             </Button>
