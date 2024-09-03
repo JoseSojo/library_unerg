@@ -11,13 +11,15 @@ import ModalTemplate from './UI/templates/ModalTemplate/ModalTemplate';
 const App = (props) => {
     
     return (
-        <ProviderSearch>
-            <ProviderModal>
-                <ModalTemplate />
-                <Header />
-                <Main />
-            </ProviderModal>
-        </ProviderSearch>
+        <>
+            <ProviderSearch>
+                <ProviderModal>
+                    <ModalTemplate />
+                    <Header />
+                    <Main />
+                </ProviderModal>
+            </ProviderSearch>
+        </>
     )
 }
 

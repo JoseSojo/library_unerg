@@ -12,9 +12,12 @@ Encore
 
     // REACT
     .enableReactPreset()
-    .enablePostCssLoader()
-
-
+    .enablePostCssLoader({
+        postcssOptions: {
+            path: require('path').resolve(__dirname, './postcss.config.js'),
+          },
+    })
+    
     .enableSingleRuntimeChunk()
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
@@ -43,6 +46,8 @@ Encore
         jQuery: 'jquery',
         'window.jQuery': 'jquery',
     })
+
+    .enablePostCssLoader()
 ;
 
 Encore.enableIntegrityHashes();

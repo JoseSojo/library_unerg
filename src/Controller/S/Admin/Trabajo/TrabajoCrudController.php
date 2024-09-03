@@ -42,9 +42,24 @@ class TrabajoCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return $actions
+        $actions
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_DETAIL, Action::DETAIL)
+            ->add(Crud::PAGE_EDIT, Action::EDIT)
+            ->add(Crud::PAGE_INDEX, Action::INDEX)
+            ->add(Crud::PAGE_NEW, Action::NEW)
         ;
+
+        var_dump($this->getUser()->getGroups()->getValues());
+        // die();
+
+        return parent::configureActions($actions)
+            ->setPermission(Action::INDEX,'ROLE_ADMIN_WORK_LIST')
+            ->setPermission(Action::DETAIL,'ROLE_ADMIN_WORK_SHOW')
+            ->setPermission(Action::NEW,'ROLE_ADMIN_WORK_CREATE')
+            ->setPermission(Action::EDIT,'ROLE_ADMIN_WORK_UPDATE')
+            ->setPermission(Action::DELETE,'ROLE_ADMIN_WORK_DELETE')
+            ;
     }
 
     public function configureFilters(Filters $filters): Filters

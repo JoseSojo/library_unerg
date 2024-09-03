@@ -107,6 +107,14 @@ class GroupFixtures extends BaseFixtures
                 "ROLE_ADMIN_WORK_PROGRAM_DELETE",
                 "ROLE_ADMIN_WORK_PROGRAM_UPDATE",
             ],
+            "Autor" => [                
+                "ROLE_ADMIN_WORK_LIST",
+                "ROLE_ADMIN_WORK_SHOW",
+                "ROLE_ADMIN_WORK_CREATE",
+                "ROLE_ADMIN_WORK_CATEGORY_LIST",
+                "ROLE_ADMIN_WORK_INVESTIGATION_LINE_LIST",
+                "ROLE_ADMIN_WORK_PROGRAM_LIST",
+            ],
         ];
         
         foreach ($groups as $key => $group) {
